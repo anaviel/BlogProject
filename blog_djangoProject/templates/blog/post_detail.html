@@ -1,0 +1,36 @@
+{% extends "base_generic.html" %}
+{% load static %}
+{% block content %}
+  <h1>{{ post.title }}</h1>
+  <div class="post-detail">
+    {% if user == post.author %}
+      <a class="icon-edit" href="{% url 'post_edit' pk=post.pk %}">
+        <img src="{% static 'images/icon-edit.png' %}" alt="Edit" width="26">
+      </a>
+      <a class="icon-delete" href="{% url 'post_delete' pk=post.pk %}">
+        <img src="{% static 'images/icon-delete.png' %}" alt="Delete" width="30">
+      </a>
+    {% endif %}
+    <div class="post-detail-content">{{ post.content }}</div>
+    <div class="post-detail-author">By {{ post.author }} on {{ post.date_posted }}</div>
+  </div>
+  {% if comments %}
+    <h2>Comments</h2>
+    {% for comment in comments %}
+      <div class="comment-detail">
+        <div class="comment-detail-text">
+          {{ comment.content }}
+        </div>
+        <div class="comment-detail-author">
+          By {{ comment.author }} on {{ comment.date_posted }}
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+  <h2>Add a comment</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn-comment" type="submit">Add</button>
+  </form>
+{% endblock %}
