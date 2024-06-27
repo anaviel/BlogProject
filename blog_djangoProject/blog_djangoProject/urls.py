@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from blog import views
 from django.contrib.auth import views as auth_views
+from blog.forms import CustomAuthenticationForm
 
 
 urlpatterns = [
@@ -27,7 +28,10 @@ urlpatterns = [
     path('post/<int:pk>/edit/', views.post_edit, name='post_edit'),
     path('signup/', views.signup, name='signup'),
     path('', views.home, name='home'),
-    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('login/', auth_views.LoginView.as_view(
+        authentication_form=CustomAuthenticationForm,
+        template_name='registration/login.html'
+    ), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('post/<int:pk>/delete/', views.post_delete, name='post_delete')
 ]
